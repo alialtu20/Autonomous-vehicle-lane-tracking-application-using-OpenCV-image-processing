@@ -14,10 +14,7 @@ print(toprak.shape)
 cv2.imshow("asds",toprak)
 
 while True:
-
-    
     ret,frame=kamera.read() # videonun okunup bir değişkene atanması 
-    
     frame=frame[0:680,0:1280]
     
     gri=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)  # BGR dan gri tona dönüştürme
@@ -25,12 +22,10 @@ while True:
     ret,thresh=cv2.threshold(filtre,160,255,cv2.THRESH_BINARY)  # thresholding uygulanması
     kenarlar=cv2.Canny(thresh,200,255)  # Canny kenar dedektörü uygulanması
    
-    
     height, width = kenarlar.shape
     kesikmaske = np.array([[(200, height-200), (500, 300),(740,300) ,(width-60, height-200)]]) # amaçlanan görüntünün elde edilmesi
     
     maske = np.zeros_like(kenarlar) # kenarlar matrisi 0 yani siyahla kaplanır
-    
     maske = cv2.fillPoly(maske, kesikmaske, 255)  # kesikmaske maske matrisine 
     maske = cv2.bitwise_and(kenarlar, maske) # and mantıksal operatörü uygulanır 
     
@@ -67,8 +62,6 @@ while True:
             x1,y1,x2,y2=cizgi1[0]
             cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),1)
             
-            
-
             if( (int((int(x2)+int(x1))/2))<420 ) :
                 cv2.putText(frame,"sola git",(450,430),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
                 cv2.putText(frame,str(round(float((60/(830-480))*(-480+(int((int(x2)+int(x1))/2)))),2)),(300,30),cv2.FONT_HERSHEY_COMPLEX,0.8,(0,255,0),1)
@@ -89,8 +82,7 @@ while True:
             x1,y1,x2,y2=cizgi2[0]
             cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),1)
             dizi2=[np.array([[int(x1),int(y1)],[int(x2),int(y2)]],dtype=np.int32)]
-
-    
+ 
     # şeritler üzerinin farklı renkle kaplanması
     cv2.polylines(frame,dizi2,True,(255,0,0),1)
     cv2.fillPoly(frame,dizi2,(255,0,0),offset=(10,0))
@@ -103,6 +95,7 @@ while True:
     # 25 mili saniye de bir çerçeve hızı ve q tuşu ile döngüden çıkılarak görüntünün kapatılması
     if cv2.waitKey(25) & 0xFF==ord("q"):
         break
+        
 # görüntüyü kapat
 kamera.release()
 cv2.destroyAllWindows()
